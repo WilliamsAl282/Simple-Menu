@@ -1,7 +1,7 @@
 import pygame
 import sys
 import config # Import the config Module
-from config import *
+
 import random
 import shapes
 
@@ -13,14 +13,37 @@ def init_game():
     pygame.display.set_caption(config.TITLE)
     return screen
 
-def handle_events(button):
+font_style = pygame.font.SysFont('Arial', 40)
+header = font_style.render('Main Menu', True, config.BLUE)
+
+button_length = 200
+button_height = 50
+button_x = 300
+button_y = 125
+button1 = pygame.Rect(200,200,button_length,button_height)
+button2 = pygame.Rect(200,270,button_length,button_height)
+button3 = pygame.Rect(200,340,button_length,button_height)
+
+button1_text = font_style.render("PLAY", True, config.BLACK)
+button2_text = font_style.render("OPTIONS", True, config.BLACK)
+button3_text = font_style.render("EXIT", True, config.BLACK)
+
+def handle_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if button.collidepoint(event.pos):
-                pygame.quit()
-                sys.exit()
+            if event.button == 1:
+                mouse_pos = pygame.mouse.get_pos()
+
+                if button1.collidepoint(mouse_pos):
+                    print("Now playing the game!")
+                elif button2.collidepoint(mouse_pos):
+                    print("Game options!")
+                elif button3.collidepoint(mouse_pos):
+                    pygame.quit()
+                    sys.exit()
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 return False
@@ -42,35 +65,42 @@ def main():
     running = True
     clock = pygame.time.Clock() # Initialize the clock her
     
-    text_font = pygame.font.SysFont('Arial', 40, bold = True)
-    surf = text_font.render('Quit', True, GREEN)
+    # font_style = pygame.font.SysFont('Arial', 40)
+    # header = font_style.render('Main Menu', True, config.BLUE)
 
-    button_length = 200
-    button_width = 60
-    button_x = 300
-    button_y = 125
-    button = pygame.Rect(button_x,button_y,button_length,button_width)
+    # button_length = 200
+    # button_height = 50
+    # button_x = 300
+    # button_y = 125
+    # button1 = pygame.Rect(200,200,button_length,button_height)
+    # button2 = pygame.Rect(200,270,button_length,button_height)
+    # button3 = pygame.Rect(200,340,button_length,button_height)
 
-    surf_rect = surf.get_rect()
-    surf_rect.center = button.center
+    # button1_text = font_style.render("PLAY", True, config.BLACK)
+    # button2_text = font_style.render("OPTIONS", True, config.BLACK)
+    # button3_text = font_style.render("EXIT", True, config.BLACK)
+
+    
 
     
 
 
     while running:
-        running = handle_events(button)
+        running = handle_events()
         screen.fill(config.WHITE) # Use color from config
 
-        mouse_x, mouse_y = pygame.mouse.get_pos()
+        screen.blit(header, (215,150))
 
-        if button.collidepoint(mouse_x, mouse_y):
-            button_color = (180, 180, 180)
-        else:
-            button_color = (110,110,110)
+        pygame.draw.rect(screen, config.GREEN, button1)
+        pygame.draw.rect(screen, config.GREEN, button2)
+        pygame.draw.rect(screen, config.GREEN, button3)
 
-        pygame.draw.rect(screen, button_color, button)
+        screen.blit(button1_text, (button1.x + (button_length - button1_text.get_width())) // 2, button1.y + (button_height - button1_text.get_height()) // 2)
 
-        screen.blit(surf, surf_rect)
+        screen.blit(button2_text, (button2.x + (button_length - button2_text.get_width())) // 2, button2.y + (button_height - button2_text.get_height()) // 2)
+
+        screen.blit(button3_text, (button3.x + (button_length - button3_text.get_width())) // 2, button3.y + (button_height - button3_text.get_height()) // 2)
+        
 
 
         # circle_color = config.RED
